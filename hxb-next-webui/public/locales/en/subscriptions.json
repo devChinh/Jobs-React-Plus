@@ -1,0 +1,18 @@
+{
+  "subscriptions": "Subscriptions",
+  "sort": "Sort",
+  "filter": "Filter",
+  "organization": "Organization",
+  "workspaces": "Workspaces",
+  "billing_accounts": "Billing Accounts",
+  "usage_statement": "Usage statement",
+  "month": "Month",
+  "csv_download": "CSV Download",
+  "workspace_name": "Workspace name",
+  "plan": "Plan",
+  "monthly_fee": "Monthly Fee",
+  "functions_usage_fee": "Functions Usage Fee",
+  "storage_usage_fee": "Storage Usage Fee",
+  "total_fee": "Total Fee",
+  "invoice_pdf": "Invoice (PDF)"
+}

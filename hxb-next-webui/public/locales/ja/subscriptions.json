@@ -1,0 +1,18 @@
+{
+  "subscriptions": "サブスクリプション",
+  "sort": "並び替え",
+  "filter": "フィルタ",
+  "organization": "組織",
+  "workspaces": "ワークスペース",
+  "billing_accounts": "請求先アカウント",
+  "usage_statement": "利用明細",
+  "month": "月",
+  "csv_download": "CSVダウンロード",
+  "workspace_name": "ワークスペース名",
+  "plan": "プラン",
+  "monthly_fee": "月額",
+  "functions_usage_fee": "ファンクション使用料",
+  "storage_usage_fee": "ストレージ使用料",
+  "total_fee": "合計料金",
+  "invoice_pdf": "請求書 (PDF)"
+}

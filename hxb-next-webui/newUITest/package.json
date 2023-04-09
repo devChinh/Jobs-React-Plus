@@ -1,0 +1,20 @@
+{
+  "name": "newuitest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test-staging": "npx cross-env ENV=staging playwright test",
+    "test-prod": "npx cross-env ENV=prod playwright test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.20.1",
+    "dotenv": "^16.0.0",
+    "env-cmd": "^10.0.1",
+    "fn": "^0.2.0",
+    "img-diff-js": "^0.5.2",
+    "playwright": "^1.20.1"
+  }
+}

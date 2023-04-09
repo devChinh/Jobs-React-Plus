@@ -1,0 +1,14 @@
+{
+  "api_access_logs": "API Access Logs",
+  "workspace": "Workspace",
+  "access_time": "Access time",
+  "status": "Status",
+  "method": "Method",
+  "url": "URL",
+  "user": "User",
+  "empty": "Unspecified",
+  "search": "Search",
+  "latency": "Latency",
+  "payload": "Payload",
+  "rows_per_page": "Rows per page:"
+}

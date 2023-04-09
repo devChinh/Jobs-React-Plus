@@ -1,0 +1,13 @@
+{
+  "workspace": "Workspaces",
+  "deployed_app": "Deployed App",
+  "organization": "Organizations",
+  "subscription": "Subscriptions",
+  "services_status": "Services Status",
+  "api_access": "API Access",
+  "api_access_today": "API Access today",
+  "monthly_access": "Monthly Access",
+  "average_response_time": "Average Response Time",
+  "resolution": "Resolution Within SLA",
+  "current_login": "Current Login Users per Workspace"
+}

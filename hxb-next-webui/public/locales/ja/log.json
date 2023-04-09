@@ -1,0 +1,14 @@
+{
+  "api_access_logs": "APIアクセスログ",
+  "workspace": "ワークスペース",
+  "access_time": "アクセス日時",
+  "status": "ステータス",
+  "method": "HTTPメソッド",
+  "url": "URL",
+  "user": "ユーザー",
+  "empty": "選択してください",
+  "search": "検索",
+  "latency": "レイテンシー",
+  "payload": "Payload",
+  "rows_per_page": "Rows per page:"
+}

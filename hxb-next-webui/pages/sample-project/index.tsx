@@ -1,0 +1,26 @@
+import type {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  NextPage,
+} from "next";
+import { SSRConfig } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import React, { useEffect, useState } from "react";
+import SampleProjectContainer from "../../container/SampleProject";
+
+const SampleProject: NextPage = () => {
+  return <SampleProjectContainer />;
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  locale,
+}): Promise<GetServerSidePropsResult<SSRConfig>> => {
+  const l = locale ? locale : "";
+  return {
+    props: {
+      ...(await serverSideTranslations(l, ["common"])),
+    },
+  };
+};
+
+export default SampleProject;

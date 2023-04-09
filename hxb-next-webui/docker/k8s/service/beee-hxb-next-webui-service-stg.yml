@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: hxb-next-webui
+    component: microservice
+  name: beee-hxb-next-webui
+  namespace: default
+spec:
+  ports:
+  - name: web
+    port: 80
+    targetPort: 3000
+  selector:
+    app: hxb-next-webui

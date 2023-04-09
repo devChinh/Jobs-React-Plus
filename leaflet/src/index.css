@@ -1,0 +1,7 @@
+
+.EditorContent {
+  height: 100%;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  overflow-y: auto;
+}

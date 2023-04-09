@@ -1,0 +1,13 @@
+{
+  "workspace": "ワークスペース",
+  "deployed_app": "デプロイされたアプリ",
+  "organization": "組織",
+  "subscription": "サブスクリプション",
+  "services_status" : "サービスステータス",
+  "api_access": "APIアクセス",
+  "api_access_today": "今日のAPIアクセス",
+  "monthly_access": "今月のAPIアクセス",
+  "average_response_time": "平均応答時間",
+  "resolution": "SLA内の解決",
+  "current_login": "現在のログインユーザー"
+}

@@ -1,0 +1,168 @@
+version: 2.1
+
+discord-notify: &discord-notify
+    post-steps:
+      - discord/status:
+          fail_only: false
+          failure_mentions: '973768753911324692,941150618138079262'
+
+orbs:
+  gcp-gke: circleci/gcp-gke@1.4.0
+  aws-eks: circleci/aws-eks@2.2.0
+  slack: circleci/slack@4.4.2
+  docker: circleci/docker@2.0.1
+  discord: teka23/discord@0.0.1
+
+jobs:
+  notify-on-start:
+    parallelism: 1
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - discord/notify:
+          color: '4383476'
+          message: 'The job on CircleCI has started.'
+
+  notify-on-success:
+    parallelism: 1
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - discord/notify:
+          color: '4383476'
+          message: 'The job on CircleCI has completed.'
+
+  build-docker-image:
+    machine: true
+    resource_class: hexabase-dev/ci-runner
+    steps:
+      - checkout
+      - docker/build:
+          image: $IMG_URL/hxb-next-webui
+          dockerfile: docker/app/Dockerfile
+          extra_build_args: --build-arg ARCH=$ARCH --build-arg ACCESS_TOKEN_USR=$GITHUB_COMPANY_USERNAME --build-arg ACCESS_TOKEN_PWD=$GITHUB_COMPANY_TOKEN
+          tag: ${CIRCLE_SHA1:0:7}
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
+            docker push $IMG_URL/hxb-next-webui:${CIRCLE_SHA1:0:7}
+
+  gke-update-image:
+    machine: true
+    resource_class: hexabase-dev/ci-runner
+    steps:
+      - gcp-gke/update-kubeconfig-with-credentials:
+          cluster: $EKS_CLUSTER_NAME
+          perform-login: true
+          install-kubectl: true
+      - run:
+         name: Update k8s deployment
+         command: |
+           kubectl set image deployment/hxb-next-webui beee-hxb-next-webui=$IMG_URL/hxb-next-webui:${CIRCLE_SHA1:0:7}
+           kubectl rollout status deployment/hxb-next-webui -w
+
+workflows:
+  build-dockerhub-deploy-eks:
+    jobs:
+      - notify-on-start:
+          filters:
+              branches:
+                only:
+                  - test
+                  - deploy
+                  - master
+          context: discord-webhook
+
+      - build-docker-image:
+          filters:
+              branches:
+                only:
+                  - test
+                  - deploy
+                  - master
+          context: hexa-<< pipeline.git.branch >>
+          requires:
+            - notify-on-start
+          <<: *discord-notify
+
+      - aws-eks/update-container-image:
+          name: deploy-to-staging
+          requires:
+            - build-docker-image
+          filters:
+              branches:
+                only:
+                  - deploy
+          context: hexa-deploy
+          cluster-name: $EKS_CLUSTER_NAME
+          aws-region: $AWS_REGION
+          resource-name: "deployment/hxb-next-webui"
+          container-image-updates: "beee-hxb-next-webui=$IMG_URL/hxb-next-webui:${CIRCLE_SHA1:0:7}"
+          get-rollout-status: true
+          watch-rollout-status: true
+          namespace: default
+          <<: *discord-notify
+
+      - notify-on-success:
+          name: notify-on-success-staging
+          requires:
+            - deploy-to-staging
+          context: discord-webhook
+
+      - gke-update-image:
+          name: deploy-to-test
+          requires:
+            - build-docker-image
+          filters:
+              branches:
+                only:
+                  - test
+          context: hexa-test
+          <<: *discord-notify
+
+      - notify-on-success:
+          name: notify-on-success-test
+          requires:
+            - deploy-to-test
+          context: discord-webhook
+
+      - discord/approval-notification:
+          mentions: '973768753911324692,941150618138079262'
+          context: hexa-master
+          requires:
+            - build-docker-image
+          filters:
+            branches:
+              only:
+                - master
+
+      - hold:
+          type: approval
+          requires:
+            - build-docker-image
+            - discord/approval-notification
+          filters:
+            branches:
+              only:
+                - master
+
+      - aws-eks/update-container-image:
+          name: deploy-to-prod
+          requires:
+            - hold
+          context: hexa-master
+          cluster-name: $EKS_CLUSTER_NAME
+          aws-region: $AWS_REGION
+          resource-name: "deployment/hxb-next-webui"
+          container-image-updates: "beee-hxb-next-webui=$IMG_URL/hxb-next-webui:${CIRCLE_SHA1:0:7}"
+          get-rollout-status: true
+          watch-rollout-status: true
+          namespace: default
+          <<: *discord-notify
+
+      - notify-on-success:
+          name: notify-on-success-prod
+          requires:
+            - deploy-to-prod
+          context: discord-webhook

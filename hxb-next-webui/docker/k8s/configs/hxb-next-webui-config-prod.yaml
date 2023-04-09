@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  AUTH0_BASE_URL: https://webui.hexabase.com
+  AUTH0_CLIENT_ID: 5uBLgkFDuFhA4ZsMr6JwZgqWvfbQge59
+  AUTH0_CLIENT_SECRET: _pgY_yQG0cQ2413hBKNQZIKjh3yeUvlIRPjoWf7v5C4BEWzWMlJkLLeP4tZteW7Y
+  AUTH0_ISSUER_BASE_URL: https://hexabase.jp.auth0.com
+  AUTH0_SCOPE: openid profile
+  AUTH0_SECRET: a1edd47864ed6658c309dee747ed58eeb877dd0f0a90048037c3bcddf4222f3b
+  NEXT_PUBLIC_HOST_GRAPHQL: http://beee-graphql/graphql
+kind: ConfigMap
+metadata:
+  name: hxb-next-webui-config
+  namespace: default
